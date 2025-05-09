@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buchinformationen: ISBN 9783837673722</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light grayish blue background */
+            color: #334155; /* Slate-700 */
+        }
+        .playfair-display {
+            font-family: 'Playfair Display', serif;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07); /* Softer shadow */
+            margin-bottom: 2rem; /* mb-8 */
+            overflow: visible; /* Allow absolute positioned elements for details to not be clipped if needed */
+        }
+        .card-header {
+            background-color: #0d9488; /* Teal-600 */
+            color: white;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #0a7066; /* Darker Teal */
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+        }
+        .card-header h2 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600; /* Semibold */
+        }
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        /* Details/Summary for GND */
+        details.gnd-details {
+            position: relative;
+        }
+        details.gnd-details > summary {
+            display: inline-flex; /* Changed from block/flex to inline-flex for compactness */
+            align-items: center;
+            padding: 0.35rem 0.75rem;
+            border-radius: 0.375rem; /* rounded-md */
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            font-weight: 500;
+            background-color: #f1f5f9; /* Slate-100 */
+            color: #0d9488; /* Teal-600 */
+            border: 1px solid #cbd5e1; /* Slate-300 */
+        }
+        details.gnd-details > summary:hover {
+            background-color: #e2e8f0; /* Slate-200 */
+            border-color: #94a3b8; /* Slate-400 */
+        }
+        details.gnd-details > summary::after {
+            content: '▼';
+            font-size: 0.7em;
+            margin-left: 0.5rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        details.gnd-details[open] > summary::after {
+            transform: rotate(180deg);
+        }
+        .details-content-gnd {
+            margin-top: 0.75rem; /* Increased margin for better separation */
+            padding: 1rem;
+            background-color: #f8fafc; /* Slate-50 */
+            border: 1px solid #e2e8f0; /* Slate-200 */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            /* To ensure it doesn't distort table cell width, but allows vertical expansion */
+            width: auto; /* Let it fill the cell, or set a max-width if needed */
+            z-index: 10; /* If it were absolute, but for now it's fine */
+        }
+        .gnd-info-item {
+            margin-bottom: 0.4rem;
+            font-size: 0.875rem; /* text-sm */
+        }
+        .gnd-info-item strong {
+            color: #475569; /* Slate-600 */
+            font-weight: 500;
+        }
+        .gnd-table th, .gnd-table td {
+            padding-top: 0.75rem;    /* py-3 */
+            padding-bottom: 0.75rem; /* py-3 */
+            padding-left: 0.75rem;   /* px-3 for first/last child */
+            padding-right: 0.75rem;
+            vertical-align: top;
+        }
+        .gnd-table thead th {
+            background-color: #f8fafc; /* Slate-50 */
+            color: #475569; /* Slate-600 */
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 600; /* semibold */
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* RVK Hierarchy */
+        .rvk-hierarchy {
+            font-size: 0.9rem;
+        }
+        .rvk-hierarchy ul {
+            list-style-type: none;
+            padding-left: 1.25rem; /* Reduced padding */
+            margin-left: 0.25rem;
+            border-left: 2px solid #ccdcde; /* Light teal/blue border */
+        }
+        .rvk-hierarchy li {
+            margin-top: 0.3rem;
+            position: relative;
+        }
+        .rvk-hierarchy li::before {
+            content: "";
+            position: absolute;
+            left: -1.30rem; /* Adjust to align with the 2px border */
+            top: 0.6em; /* Center with text */
+            width: 0.75rem;
+            height: 2px;
+            background-color: #ccdcde; /* Light teal/blue border */
+        }
+        .rvk-notation {
+            font-weight: 600;
+            color: #0c7a71; /* Darker Teal for emphasis */
+        }
+        .rvk-current-path > .rvk-notation,
+        .rvk-current-path > span > .rvk-notation { /* For direct children and nested spans */
+            color: #c026d3; /* Fuchsia-600 for highlight */
+            background-color: #fce7f3; /* Fuchsia-50 */
+            padding: 0.1rem 0.3rem;
+            border-radius: 0.2rem;
+        }
+        .rvk-current > .rvk-notation {
+            color: #be123c; /* Rose-700 for very specific */
+            background-color: #ffe4e6; /* Rose-50 */
+            padding: 0.1rem 0.3rem;
+            border-radius: 0.2rem;
+            font-weight: 700;
+        }
+        .rvk-description {
+            color: #4b5563; /* Gray-600 */
+            font-size: 0.85rem;
+            margin-left: 0.5rem;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #cffafe; /* Cyan-100 */
+            color: #0e7490; /* Cyan-700 */
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px; /* rounded-full */
+            font-size: 0.8rem; /* Slightly smaller */
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        .book-meta p {
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+        .book-meta strong {
+            color: #334155; /* Slate-700 */
+        }
+        .section-subtitle {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600;
+            color: #0d9488; /* Teal-600 */
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 2px solid #99f6e4; /* Teal-200 */
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-700 p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="playfair-display text-5xl font-bold text-teal-700">Buchanalyse</h1>
+            <p class="text-2xl text-slate-500 mt-2">ISBN: 978-3-8376-7372-2</p>
+        </header>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-xl">Allgemeine Buchinformationen</h2>
+            </div>
+            <div class="card-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 book-meta">
+                    <div>
+                        <p><strong>Titel:</strong> Maschinen und Atmosphären</p>
+                        <p><strong>Autor:</strong> Andreas Sieß</p>
+                        <p><strong>Verlag:</strong> transcript Verlag</p>
+                    </div>
+                    <div>
+                        <p><strong>Erscheinungsdatum:</strong> 25.11.2024</p>
+                        <p><strong>Seiten:</strong> 588</p>
+                        <p><strong>Reihe:</strong> Medien- und Gestaltungsästhetik</p>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <h3 class="font-semibold text-lg text-teal-700 mb-2">Kurzbeschreibung:</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">
+                        In welchem Zusammenhang steht 'das Virtuelle' mit Poetiken, die in der Romantik konturiert wurden? Andreas Sieß zeigt, dass sich die ästhetischen Vorstellungen dessen, was 'das Virtuelle' ist, nicht nur bereits um 1800 konsolidierten, sondern dass die (bild-)ästhetischen Maßstäbe, die heute grundlegend für moderne Anwendungen der Virtual Reality sind, bereits damals Gegenstand intensiver Auseinandersetzungen waren – insbesondere in den Werken E. T. A. Hoffmanns. Die Studie untersucht die Verschränkung von Technologie, Ästhetik und Literatur um 1800 und fragt nach der Fortdauer dieser Verknüpfungen in der Gegenwart digitaler Medien.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-xl">GND-Schlagwörter (semantische Erschließung)</h2>
+            </div>
+            <div class="card-content">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left gnd-table">
+                        <thead>
+                            <tr>
+                                <th class="w-2/5">Schlagwort & Details (DNB)</th>
+                                <th class="w-1/5">GND-ID</th>
+                                <th class="w-2/5 text-right">Externer Link (d-nb.info)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-slate-200">
+                                <td>
+                                    <details class="gnd-details">
+                                        <summary>Ästhetik</summary>
+                                        <div class="details-content-gnd">
+                                            <p class="gnd-info-item"><strong>Sachbegriff:</strong> Ästhetik</p>
+                                            <p class="gnd-info-item"><strong>Synonyme:</strong> Künste / Ästhetik, Künste / Theorie, Kunstästhetik, Kunstphilosophie, Kunsttheorie, Philosophische Ästhetik, Kunstanschauung, Kunstauffassung.</p>
+                                            <p class="gnd-info-item"><strong>Oberbegriffe:</strong> Philosophie.</p>
+                                            <p class="gnd-info-item"><strong>Verwandter Begriff:</strong> Ästhetizismus, Ästhetisches Handeln, Ästhetisches Verhalten, Ästhetisches Ideal, Ästhetisches Objekt, Ästhetisches Urteil.</p>
+                                            <p class="gnd-info-item"><strong>DDC-Notation:</strong> 111.85, 700.1, 701.17, 801.93, 770.1.</p>
+                                            <p class="gnd-info-item"><strong>Systematik (DNB):</strong> 13.1a Bildende Kunst ; 4.6 Ästhetik.</p>
+                                            <p class="gnd-info-item"><strong>Andere Normdaten:</strong> LCSH: Art -- Philosophy, LCSH: Aesthetics, RAMEAU: Art -- Philosophie, RAMEAU: Esthétique.</p>
+                                        </div>
+                                    </details>
+                                </td>
+                                <td><span class="tag">4000626-8</span></td>
+                                <td class="text-right"><a href="https://d-nb.info/gnd/4000626-8" target="_blank" class="text-teal-600 hover:text-teal-800 hover:underline text-sm">d-nb.info/gnd/4000626-8</a></td>
+                            </tr>
+                            <tr class="border-b border-slate-200">
+                                <td>
+                                    <details class="gnd-details">
+                                        <summary>Virtuelle Realität</summary>
+                                        <div class="details-content-gnd">
+                                            <p class="gnd-info-item"><strong>Sachbegriff:</strong> Virtuelle Realität</p>
+                                            <p class="gnd-info-item"><strong>Erläuterungen:</strong> Eine synthetische dreidimensionale Welt, die mithilfe eines Graphikcomputers und spezieller Ein- und Ausgabegeräte in Echtzeit interaktiv vom Benutzer wahrgenommen und manipuliert werden kann. Der Effekt der Immersion vermittelt dem Anwender das Gefühl, in der virtuellen Umgebung eingetaucht zu sein und an ihr teilzuhaben (Hr. Krapichler, 1999).</p>
+                                            <p class="gnd-info-item"><strong>Synonyme:</strong> Virtual reality, Virtuelle Welt, Artificial reality, Virtual environments, Virtuelle Räume, Virtueller Raum, Künstliche Wirklichkeit, Virtuelle Umgebung, Künstliche Realität, Artificial world, Virtual environment, VR-Technologie, Cyberrealität, Künstliche Welt &lt;Informatik&gt;.</p>
+                                            <p class="gnd-info-item"><strong>Verwandter Begriff:</strong> Cyberspace, Second Life, Virtuelle Produktion.</p>
+                                            <p class="gnd-info-item"><strong>DDC-Notation:</strong> 006.8.</p>
+                                            <p class="gnd-info-item"><strong>Systematik (DNB):</strong> 30 Informatik, Datenverarbeitung.</p>
+                                            <p class="gnd-info-item"><strong>Andere Normdaten:</strong> LCSH: Virtual reality, RAMEAU: Réalité virtuelle.</p>
+                                        </div>
+                                    </details>
+                                </td>
+                                <td><span class="tag">4399931-1</span></td>
+                                <td class="text-right"><a href="https://d-nb.info/gnd/4399931-1" target="_blank" class="text-teal-600 hover:text-teal-800 hover:underline text-sm">d-nb.info/gnd/4399931-1</a></td>
+                            </tr>
+                            <tr> <td>
+                                    <details class="gnd-details">
+                                        <summary>Hoffmann, Ernst Theodor Amadeus</summary>
+                                        <div class="details-content-gnd">
+                                            <p class="gnd-info-item"><strong>Person:</strong> Hoffmann, E. T. A.</p>
+                                            <p class="gnd-info-item"><strong>Geschlecht:</strong> männlich</p>
+                                            <p class="gnd-info-item"><strong>Andere Namen:</strong> Hoffmann, Ernst Theodor Amadeus (Vollständiger Name); Hoffmann, Ernst Theodor Wilhelm (Früherer Name) (bis 1805); Hoffmann, Ernst Theodor Amadäus; Hoffmann, E. Th. A.; Gofman, E. T. A.; Hoffmann, Ernesto Teodoro Amedeo; etc.</p>
+                                            <p class="gnd-info-item"><strong>Lebensdaten:</strong> * 24. Januar 1776 in Königsberg (Preußen); † 25. Juni 1822 in Berlin.</p>
+                                            <p class="gnd-info-item"><strong>Beruf:</strong> Jurist, Schriftsteller (Romantik), Komponist, Kapellmeister, Musikkritiker, Zeichner, Karikaturist.</p>
+                                         </div>
+                                    </details>
+                                </td>
+                                <td><span class="tag">118552465</span></td>
+                                <td class="text-right"><a href="https://d-nb.info/gnd/118552465" target="_blank" class="text-teal-600 hover:text-teal-800 hover:underline text-sm">d-nb.info/gnd/118552465</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-xl">RVK-Klassifikation (Regensburger Verbundklassifikation)</h2>
+            </div>
+            <div class="card-content">
+                <div class="mb-4 p-4 bg-teal-50 border border-teal-200 rounded-lg">
+                    <p class="mb-1"><strong>Zugewiesene Notation:</strong> <span class="text-xl font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded">GK 4944</span></p>
+                    <p class="text-md font-semibold text-teal-800"><strong>Bedeutung:</strong> Hoffmann, Ernst Theodor Amadeus – Sekundärliteratur</p>
+                </div>
+                <p class="mb-5 text-sm text-slate-600"><strong>Begründung der Einordnung:</strong> Die Monografie ist literaturwissenschaftliche Sekundärliteratur zu E. T. A. Hoffmann und wird daher in der RVK unter GK 4944 („Hoffmann, Ernst Theodor Amadeus – Sekundärliteratur“) eingeordnet.</p>
+
+                <h3 class="section-subtitle">Hierarchische Einordnung in der RVK:</h3>
+                <div class="rvk-hierarchy text-slate-700">
+                    <ul>
+                        <li class="rvk-current-path"><span class="rvk-notation">G</span> Germanistik, Niederlandistik, Skandinavistik
+                            <ul>
+                                <li><span class="rvk-notation">GA</span> <span class="rvk-description">Allgemeines zur Germanistik, Methodik, Hilfsmittel</span></li>
+                                <li class="rvk-current-path"><span class="rvk-notation">GK</span> Neuere deutsche Literatur: Autoren (Personen)
+                                    <ul>
+                                        <li><span class="rvk-description">... (Autorenbereiche)</span></li>
+                                        <li class="rvk-current-path"><span class="rvk-notation">GK 4801 - GK 5000</span> Einzelne Autoren Ho - Hz
+                                            <ul>
+                                                <li><span class="rvk-description">...</span></li>
+                                                <li><span class="rvk-notation">GK 4931</span> <span class="rvk-description">Hölderlin, Friedrich</span></li>
+                                                <li><span class="rvk-notation">GK 4934</span> <span class="rvk-description">Hölty, Ludwig Christoph Heinrich</span></li>
+                                                <li class="rvk-current-path"><span class="rvk-notation">GK 4943 - GK 4945</span> Hoffmann, Ernst Theodor Amadeus
+                                                    <ul>
+                                                        <li><span class="rvk-notation">GK 4943</span> <span class="rvk-description">Hoffmann, E.T.A. - Primärliteratur, Gesamtausgaben, Auswahlen</span></li>
+                                                        <li class="rvk-current"><span class="rvk-notation">GK 4944</span> <span class="rvk-description">Hoffmann, E.T.A. - Sekundärliteratur</span></li>
+                                                        <li><span class="rvk-notation">GK 4945</span> <span class="rvk-description">Hoffmann, E.T.A. - Biographien, Autobiographien, Briefe, Tagebücher</span></li>
+                                                    </ul>
+                                                </li>
+                                                <li><span class="rvk-notation">GK 4953</span> <span class="rvk-description">Hofmannsthal, Hugo von</span></li>
+                                                <li><span class="rvk-notation">GK 4984</span> <span class="rvk-description">Holz, Arno</span></li>
+                                                <li><span class="rvk-description">...</span></li>
+                                            </ul>
+                                        </li>
+                                        <li><span class="rvk-description">... (Weitere Autorenbereiche)</span></li>
+                                    </ul>
+                                </li>
+                                <li><span class="rvk-notation">GL</span> <span class="rvk-description">Deutsche Literatur außerhalb des geschlossenen deutschen Sprachgebiets</span></li>
+                                <li><span class="rvk-notation">GM</span> <span class="rvk-description">Niederlandistik</span></li>
+                                <li><span class="rvk-notation">GN</span> <span class="rvk-description">Skandinavistik</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <p class="mt-6 text-xs text-slate-500">Die RVK-Hierarchie und Notationsbezeichnungen basieren auf Informationen von <a href="https://rvk.uni-regensburg.de/" target="_blank" class="text-teal-600 hover:text-teal-800 hover:underline">RVK Online</a> (Regensburger Verbundklassifikation). Die Darstellung dient zur Veranschaulichung der systematischen Einordnung des Buches.</p>
+            </div>
+        </div>
+
+        <footer class="text-center mt-12 mb-6">
+            <p class="text-sm text-slate-500">&copy; Mai 2025. Präsentationsansicht Buchdaten.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
